@@ -14,7 +14,7 @@ date = str(datetime.datetime.now())
 
 
 
-DISCORD_BOT_TOKEN = 'OTM3MzAzMzMwMjQ4NjAxNjQw.GTPmIM.IAXS7D8BJGFmModHCGhz7Q_38wo9ow4JNkTyuM'
+DISCORD_BOT_TOKEN = '' #token
 
 client = discord.Client()
 
