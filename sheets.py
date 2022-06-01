@@ -22,7 +22,6 @@ class GoogleSheet():
     def sendData(self, first, last, email, phone):
         # sends the data to the spreadsheet
         contacts = []
-        contacts2 = []
         
         id_num = self.getRowLength()
         
@@ -31,14 +30,9 @@ class GoogleSheet():
         contacts.append(last)
         contacts.append(email)
         
-        contacts2.append(id_num)
-        contacts2.append(first)
-        contacts2.append(last)
-        contacts2.append(phone)
         
         # inserts the data (py arrays -> spreadsheet rows)
         self.contacts.insert_row(contacts, id_num+1)
-        self.contacts2.insert_row(contacts2, id_num+1)
 
 test = GoogleSheet()
 test.sendData('first', 'last', 'email', 'phone' )
