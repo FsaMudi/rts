@@ -1,37 +1,66 @@
 import discord
 from discord.ext import commands
-from config import settings
+import requests
+import asyncio
+import time
+from quest import question
+from sheets import GoogleSheet
+import datetime
 
-
-
-
-bot = commands.Bot(command_prefix = settings['prefix']) #Префикс в config.py
-    
-    
-    
-@bot.command() 
-async def start(ctx): 
-    file1 = open('1question.txt', encoding='utf-8') #Открытие файла
-    file2 = open('2question.txt', encoding='utf-8')
-    file3 = open('3question.txt', encoding='utf-8')
-    file4 = open('4question.txt', encoding='utf-8')
-    file5 = open('5question.txt', encoding='utf-8')
-    read1 = file1.read() #Просмотр содержимого файла
-    read2 = file2.read()
-    read3 = file3.read()
-    read4 = file4.read()
-    read5 = file5.read()
-    await ctx.send(read1) #Сообщение
-    await ctx.send(read2)
-    await ctx.send(read3)
-    await ctx.send(read4)
-    await ctx.send(read5) 
-    
+date = str(datetime.datetime.now())
 
 
 
 
 
 
-bot.run(settings['token'])
+DISCORD_BOT_TOKEN = '' #token
 
+client = discord.Client()
+
+googlesheet = GoogleSheet()
+
+@client.event
+async def on_ready():
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
+
+
+
+@client.event
+async def on_voice_state_update(member, before, after):
+    if before.channel is None and after.channel is not None:
+        print('Started')
+    elif before.channel is not None and after.channel is None:
+        user = client.get_user(member.id)
+        user = await client.fetch_user(member.id)
+        for role in member.roles:
+            if role.name == 'Test':
+                print('Teacher!')
+            else:   
+                await user.send(embed = discord.Embed(description = f'{question[0]}', colour = discord.Color.green()))
+
+
+
+@client.event
+async def on_message(message):
+    if message.content.startswith('1.'):
+        member = message.author.id
+        name = message.author.name
+        content = message.content
+        user = client.get_user(member)
+        user = await client.fetch_user(member)
+        await user.send(embed = discord.Embed(description = f'Спасибо за оценку', colour = discord.Color.green()))
+        googlesheet.sendData(name, str(member), content[2:], date)
+
+
+
+
+
+
+
+
+
+client.run(DISCORD_BOT_TOKEN)
