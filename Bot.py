@@ -15,8 +15,7 @@ date = str(datetime.datetime.now())
 
 
 DISCORD_BOT_TOKEN = '' #token
-<<<<<<< HEAD
-=======
+
 
 client = discord.Client()
 
